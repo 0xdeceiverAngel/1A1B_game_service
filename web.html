@@ -77,7 +77,15 @@
         <script type="text/javascript">
             var oHistory = $('#history');
             var o_textaera = $('#message_textaera');
-
+            var sample__json={
+               "action":"",
+               "user_guess":"",
+               "send_message":"",
+               "respond_guess":"",
+               "recv_message":"",
+               "creat_room":"",
+               "join_room":""
+            };
             if ("WebSocket" in _textaeradow){
                 console.log("您的瀏覽器支援 WebSocket!");
                 var ws = new WebSocket("ws://127.0.0.1:9001");
@@ -88,6 +96,8 @@
 
                 ws.onmessage = function (evt) {
                     var dataReceive = evt.data;
+                    dataReceive=JSON.parse(dataReceive);
+                    dataReceive=dataReceive['recv_message'];
                     console.log("資料已接收..."+dataReceive);
                     $('#history').val($('#history').val()+dataReceive+"\n");
                 };
@@ -103,17 +113,21 @@
 
             function sendMessage(){
                 var dataSend = o_textaera.val().trim();
-                ws.send(dataSend);
+                sample__json['action']='send_message';
+                sample__json['send_message']=dataSend;
+
+                ws.send(JSON.stringify(sample__json));
                 o_textaera.val('');
             }
             function creatroom()
             {
-              var dataSend='/room';
+              sample__json['action']='creat_room';
               ws.send(dataSend);
             }
             function enterroom()
             {
-              var dataSend='/room=';
+              sample__json['action']='join_room';
+              sample__json['join_room']=
               ws.send(dataSend);
             }
             function guess()

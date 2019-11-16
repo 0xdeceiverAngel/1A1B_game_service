@@ -1,10 +1,29 @@
 from websocket_server import WebsocketServer
 import binascii
 import time
+import json
+'''
+{
+ "action":guess send_message respond_guess recv_message
+ "user_guess":"", 
+ "send_message":"",
+ "respond_guess":"",
+ "recv_message":""
+}
+'''
 sample = {
     'roomid' : 0,
     'p1': {},
     'p2':{}    
+}
+sample_json ={
+ "action":"",
+ "user_guess":"", 
+ "send_message":"",
+ "respond_guess":"",
+ "recv_message": "",
+ "creat_room": "",
+ "join_room":""
 }
 room = []
 # Called for every client connecting (after handshake)
@@ -24,19 +43,35 @@ def client_left(client, server):
 def message_received(client, server, message):
     if len(message) > 200:
         message = message[:200] + '..'
+    try:
+        message_djson = json.loads(message)
+        if (message_djson['action'] == 'user_guess'):
+        if (message_djson['action'] == 'send_message' or message_djson['action']=='recv_message'):
+            # room chat    
+            for p in range(0,len(room)):
+                if ((room[p]['p1']) == client):
+                    key = p
+                    server.send_message(room[key]['p2'], "somebody:"+message_djson[message_djson['action']])
+                    break
+                if ((room[p]['p2']) == client):
+                    key = p
+                    server.send_message(room[key]['p1'], "somebody:"+message_djson[message_djson['action']])
+                    break
+        if (message_djson['action'] == 'respond_guess'):
+        if (message_djson['action'] == 'creat_room'):
+        if (message_djson['action'] == 'join_room'):
         
-    for p in range(0,len(room)):
-        # print(room[p]['roomid'])
-            if ((room[p]['p1']) == client):
-                key = p
-                server.send_message(room[key]['p2'], "somebody:"+message)
-                break
-            if ((room[p]['p2']) == client):
-                key = p
-                server.send_message(room[key]['p1'], "somebody:"+message)
-                break
+            
+        
+            
+        
+    except:
+        pass
+    
 
-    print("Client(%d) said: %s" % (client['id'], message))
+    # print("Client(%d) said: %s" % (client['id'], message))
+    
+    # creat room 
     if (message == "/room"):
         tmp_sample = sample
         tmp_sample['p1'] = client
@@ -47,6 +82,7 @@ def message_received(client, server, message):
         
         print("room:", room)
     exp_input=""
+    # join room  
     try:
         if(message[:5]=="/room"):
             exp_input = message.split('=')[1]
@@ -83,24 +119,3 @@ server.run_forever()
 
 
 
-'''
-{
- "action":"guess",
- "user_guess":"1234"
- 
-}
-
-{
- "action":"send_message,
- "send_message":"message"
-}
-{
- "action":"respond_guess",
- "respond_guess":"1A1B"
- 
-}
-{
- "action":"recv_message",
- "recv_message":"message"
-}
-'''
