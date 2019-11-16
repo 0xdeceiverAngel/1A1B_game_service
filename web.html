@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>1A1B base on websocket</title>
+        <style>
+            body{
+                overflow: hidden;
+                font-family:Microsoft JhengHei;
+            }
+            #banner
+            {
+              display: flex;
+              text-align: center;
+            }
+            #banner p{
+              width: 500px;
+            }
+            #show_history{
+                display: flex;
+                text-align: center;
+            }
+
+            #_textaera{
+                display: flex;
+                margin-top: 20px;
+                text-align: center;
+            }
+            #send_btn{
+                margin-top: 10px;
+                text-align: center;
+            }
+            #send_btn button{
+                font-family:Microsoft JhengHei;
+                background-color: #009688;
+                color: #fff;
+                height: 40px;
+                border: 0;
+                border-radius: 3px 3px;
+                padding-left: 10px;
+                padding-right: 10px;
+                cursor: pointer;
+            }
+        </style>
+        <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+    </head>
+    <body>
+            <div id="banner">
+              <p>guess_histroy</p>
+
+              <p>chat_histroy</p>
+
+
+            </div>
+
+            <div id="show_history">
+                <textarea id="hist_left"style="resize:none" cols="80" rows="20"></textarea>
+                <textarea id="his_right"style="resize:none" cols="80" rows="20"></textarea>
+
+            </div>
+
+            <div id="_textaera">
+                <textarea id="message_textaera"style="resize:none" cols="80" rows="5"></textarea>
+                <textarea id="message_textaera"style="resize:none" cols="80" rows="5"></textarea>
+
+            </div>
+
+            <div id="send_btn">
+                <button onclick="sendMessage()">傳送對話</button>
+                <button onclick="creatroom()">創房間</button>
+                <button onclick="enterroom()">進去房間</button>
+                <button onclick="guess()">猜</button>
+
+
+            </div>
+
+        <script type="text/javascript">
+            var oHistory = $('#history');
+            var o_textaera = $('#message_textaera');
+
+            if ("WebSocket" in _textaeradow){
+                console.log("您的瀏覽器支援 WebSocket!");
+                var ws = new WebSocket("ws://127.0.0.1:9001");
+                //var ws = new WebSocket("ws://localhost:9001");
+                ws.onopen = function(){
+                    console.log("websocket 已連線上");
+                }
+
+                ws.onmessage = function (evt) {
+                    var dataReceive = evt.data;
+                    console.log("資料已接收..."+dataReceive);
+                    $('#history').val($('#history').val()+dataReceive+"\n");
+                };
+
+                ws.onclose = function() {
+                    console.log("連線已關閉...");
+                };
+
+            }else{
+                // 瀏覽器不支援 WebSocket
+                console.log("您的瀏覽器不支援 WebSocket!");
+            }
+
+            function sendMessage(){
+                var dataSend = o_textaera.val().trim();
+                ws.send(dataSend);
+                o_textaera.val('');
+            }
+            function creatroom()
+            {
+              var dataSend='/room';
+              ws.send(dataSend);
+            }
+            function enterroom()
+            {
+              var dataSend='/room=';
+              ws.send(dataSend);
+            }
+            function guess()
+            {
+
+            }
+        </script>
+    </body>
+</html>
