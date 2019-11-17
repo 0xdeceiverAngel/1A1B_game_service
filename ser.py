@@ -31,8 +31,8 @@ room = []
 def genQ():
     ans=''
     while 1:
-    if (len(ans) == 4):
-        break
+        if (len(ans) == 4):
+            break
     inp = random.choice('0123456789')
     if inp not in ans:
         ans+=inp
@@ -82,7 +82,14 @@ def message_received(client, server, message):
                     if (ret == 'win'):
                         resend['respond_guess']='win'
                         server.send_message(client, json.dumps(resend))
+                        resend['recv_message'] = 'ans is :' + str(room[key]['ans']+'\n And new game on')
+                        resend['action'] = 'recv_message'
                         
+                        server.send_message(room[key]['p1'],json.dumps(resend))
+                        server.send_message(room[key]['p2'],json.dumps(resend))
+                        room[key]['ans']=genQ()
+
+
                     else:
                         resend['respond_guess']=ret
                         server.send_message(client, json.dumps(resend))
