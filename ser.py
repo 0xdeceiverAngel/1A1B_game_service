@@ -2,6 +2,7 @@ from websocket_server import WebsocketServer
 import binascii
 import time
 import json
+import random
 '''
 {
  "action":guess send_message respond_guess recv_message
@@ -14,7 +15,8 @@ import json
 sample = {
     'roomid' : 0,
     'p1': {},
-    'p2':{}    
+    'p2': {},
+    'ans':''
 }
 sample_json ={
  "action":"",
@@ -26,11 +28,36 @@ sample_json ={
  "join_room":""
 }
 room = []
+def genQ():
+    ans=''
+    while 1:
+    if (len(ans) == 4):
+        break
+    inp = random.choice('0123456789')
+    if inp not in ans:
+        ans+=inp
+    return (ans)
+def chk_ans(guess,ans):
+    while 1:
+        if (guess == ans):
+            return('win')
+            break
+    A = 0
+    B = 0
+    for i in range(4):
+        if (ans[i] == guess[i]):
+            A = A + 1
+        if (guess[i] in ans):
+            B = B + 1
+    B = B - A
+    return (str(A) + 'A' + str(B) + 'B')
 # Called for every client connecting (after handshake)
 def new_client(client, server):
     print("New client connected and was given id %d" % client['id'])
     # server.send_message_to_all("Hey all, a new client has joined us")
-    server.send_message(client,"welcom~")
+    resend = sample_json
+    resend['recv_message']="welcome"
+    server.send_message(client,json.dumps(resend))
 
 
 
@@ -45,66 +72,71 @@ def message_received(client, server, message):
         message = message[:200] + '..'
     try:
         message_djson = json.loads(message)
+        
         if (message_djson['action'] == 'user_guess'):
-        if (message_djson['action'] == 'send_message' or message_djson['action']=='recv_message'):
+            resend = sample_json
+            resend['action'] = 'respond_guess'
+            for key in range(0,len(room)):
+                if ((room[key]['p1']) == client or (room[key]['p2']) == client):
+                    ret = chk_ans(message_djson['user_guess'], room[key]['ans'])
+                    if (ret == 'win'):
+                        resend['respond_guess']='win'
+                        server.send_message(client, json.dumps(resend))
+                        
+                    else:
+                        resend['respond_guess']=ret
+                        server.send_message(client, json.dumps(resend))
+                    break
+               
+        if (message_djson['action'] == 'send_message' ):
             # room chat    
-            for p in range(0,len(room)):
-                if ((room[p]['p1']) == client):
-                    key = p
-                    server.send_message(room[key]['p2'], "somebody:"+message_djson[message_djson['action']])
+            resend = sample_json
+            resend['action'] = 'recv_message'
+            resend['recv_message']=message_djson['send_message']
+            for key in range(0,len(room)):
+                if ((room[key]['p1']) == client):
+                    server.send_message(room[key]['p2'],json.dumps(resend))
                     break
-                if ((room[p]['p2']) == client):
-                    key = p
-                    server.send_message(room[key]['p1'], "somebody:"+message_djson[message_djson['action']])
+                if ((room[key]['p2']) == client):
+                    server.send_message(room[key]['p1'],json.dumps(resend))
                     break
-        if (message_djson['action'] == 'respond_guess'):
         if (message_djson['action'] == 'creat_room'):
+            tmp_sample = sample
+            tmp_sample['p1'] = client
+            now_time=str(time.time())
+            tmp_sample['roomid']=binascii.crc32(str.encode(now_time))
+            room.append(tmp_sample)
+            resend = sample_json
+            resend['action'] = 'creat_room'
+            resend['creat_room']=tmp_sample['roomid']
+            server.send_message(client,json.dumps(resend))
         if (message_djson['action'] == 'join_room'):
-        
-            
-        
-            
-        
-    except:
-        pass
-    
-
-    # print("Client(%d) said: %s" % (client['id'], message))
-    
-    # creat room 
-    if (message == "/room"):
-        tmp_sample = sample
-        tmp_sample['p1'] = client
-        now_time=str(time.time())
-        tmp_sample['roomid']=binascii.crc32(str.encode(now_time))
-        room.append(tmp_sample) 
-        server.send_message(client,"creat room success: \n"+str(tmp_sample['roomid']))
-        
-        print("room:", room)
-    exp_input=""
-    # join room  
-    try:
-        if(message[:5]=="/room"):
-            exp_input = message.split('=')[1]
-            # print(exp_input)
             for p in range(0,len(room)):
                 print(room[p]['roomid'])
-                if (str(room[p]['roomid']) == exp_input):
+                if (str(room[p]['roomid']) == message_djson['join_room']):
                     key = p
                     
                     room[p]['p2']=client
                     # print(p)
-                    
-                    server.send_message(room[key]['p1'], "success join room")
-                    server.send_message(room[key]['p2'], "success join room")
+                    resend = sample_json
+                    resend['action'] = 'respond_message'
+                    resend['respond_message'] = 'success join room'
+                    room[key]['ans']=genQ()
+                    server.send_message(room[key]['p1'],json.dumps(resend))
+                    server.send_message(room[key]['p2'],json.dumps(resend))
                     
                     break
-                    
-        if (message == '/all'):
-            print(room)
+            
+        
+            
+        
 
-    except:
-        pass
+    
+
+    # print("Client(%d) said: %s" % (client['id'], message))
+    
+
+
     
     # server.send_message_to_all("Client(%d) said: %s" % (client['id'], message))
     # server.send_message(client,"Client(%d) said: %s" % (client['id'], message))
