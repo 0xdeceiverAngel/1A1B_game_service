@@ -126,7 +126,7 @@ def message_received(client, server, message):
                     room[p]['p2']=client
                     # print(p)
                     resend = sample_json
-                    resend['action'] = 'respond_message'
+                    resend['action'] = 'join_room'
                     resend['respond_message'] = 'success join room'
                     room[key]['ans']=genQ()
                     server.send_message(room[key]['p1'],json.dumps(resend))
