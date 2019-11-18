@@ -134,7 +134,8 @@ def message_received(client, server, message):
 
                     break
 
-
+    except:
+        pass  
 
 
 
