@@ -6,7 +6,7 @@ import random
 '''
 {
  "action":guess send_message respond_guess recv_message
- "user_guess":"", 
+ "user_guess":"",
  "send_message":"",
  "respond_guess":"",
  "recv_message":""
@@ -20,7 +20,7 @@ sample = {
 }
 sample_json ={
  "action":"",
- "user_guess":"", 
+ "user_guess":"",
  "send_message":"",
  "respond_guess":"",
  "recv_message": "",
@@ -72,7 +72,7 @@ def message_received(client, server, message):
         message = message[:200] + '..'
     try:
         message_djson = json.loads(message)
-        
+
         if (message_djson['action'] == 'user_guess'):
             resend = sample_json
             resend['action'] = 'respond_guess'
@@ -82,21 +82,21 @@ def message_received(client, server, message):
                     if (ret == 'win'):
                         resend['respond_guess']='win'
                         server.send_message(client, json.dumps(resend))
-                        resend['recv_message'] = 'ans is :' + str(room[key]['ans']+'\n And new game on')
+                        resend['recv_message'] = 'ans is :' + str(room[key]['ans']+'\nAnd new game on')
                         resend['action'] = 'recv_message'
-                        
+
                         server.send_message(room[key]['p1'],json.dumps(resend))
                         server.send_message(room[key]['p2'],json.dumps(resend))
                         room[key]['ans']=genQ()
 
 
                     else:
-                        resend['respond_guess']=ret
+                        resend['respond_guess']='you send:'+message_djson['user_guess']+'\nthat not correct:'+ret
                         server.send_message(client, json.dumps(resend))
                     break
-               
+
         if (message_djson['action'] == 'send_message' ):
-            # room chat    
+            # room chat
             resend = sample_json
             resend['action'] = 'recv_message'
             resend['recv_message']=message_djson['send_message']
@@ -115,14 +115,14 @@ def message_received(client, server, message):
             room.append(tmp_sample)
             resend = sample_json
             resend['action'] = 'creat_room'
-            resend['creat_room']=tmp_sample['roomid']
+            resend['creat_room']='your room id is :'+tmp_sample['roomid']
             server.send_message(client,json.dumps(resend))
         if (message_djson['action'] == 'join_room'):
             for p in range(0,len(room)):
                 print(room[p]['roomid'])
                 if (str(room[p]['roomid']) == message_djson['join_room']):
                     key = p
-                    
+
                     room[p]['p2']=client
                     # print(p)
                     resend = sample_json
@@ -131,20 +131,20 @@ def message_received(client, server, message):
                     room[key]['ans']=genQ()
                     server.send_message(room[key]['p1'],json.dumps(resend))
                     server.send_message(room[key]['p2'],json.dumps(resend))
-                    
-                    break
-            
-        
-            
-        
 
-    
+                    break
+
+
+
+
+
+
 
     # print("Client(%d) said: %s" % (client['id'], message))
-    
 
 
-    
+
+
     # server.send_message_to_all("Client(%d) said: %s" % (client['id'], message))
     # server.send_message(client,"Client(%d) said: %s" % (client['id'], message))
 
@@ -155,6 +155,3 @@ server.set_fn_new_client(new_client)
 server.set_fn_client_left(client_left)
 server.set_fn_message_received(message_received)
 server.run_forever()
-
-
-
