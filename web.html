@@ -8,6 +8,11 @@
                 overflow: hidden;
                 font-family:Microsoft JhengHei;
             }
+            #in_room{
+              margin:auto;
+              text-align: center;
+              margin-top: 20px;
+            }
             #banner
             {
               display: flex;
@@ -29,8 +34,11 @@
             #send_btn{
                 margin-top: 10px;
                 text-align: center;
+                /* display: flex; */
+
+
             }
-            #send_btn button{
+             button{
                 font-family:Microsoft JhengHei;
                 background-color: #009688;
                 color: #fff;
@@ -54,29 +62,34 @@
             </div>
 
             <div id="show_history">
-                <textarea id="hist_left"style="resize:none" cols="80" rows="20"></textarea>
-                <textarea id="his_right"style="resize:none" cols="80" rows="20"></textarea>
+                <textarea id="guess_histroy"style="resize:none" cols="80" rows="20"></textarea>
+                <textarea id="chat_histroy"style="resize:none" cols="80" rows="20"></textarea>
 
             </div>
 
             <div id="_textaera">
-                <textarea id="message_textaera"style="resize:none" cols="80" rows="5"></textarea>
-                <textarea id="message_textaera"style="resize:none" cols="80" rows="5"></textarea>
+                <textarea id="guess_textaera"style="resize:none" cols="80" rows="5"></textarea>
+                <textarea id="chat_textaera"style="resize:none" cols="80" rows="5"></textarea>
 
             </div>
 
             <div id="send_btn">
                 <button onclick="sendMessage()">傳送對話</button>
-                <button onclick="creatroom()">創房間</button>
-                <button onclick="enterroom()">進去房間</button>
                 <button onclick="guess()">猜</button>
+                <button onclick="creatroom()">創房間</button>
+
 
 
             </div>
+            <div id="in_room">
+              <!-- <input type="text"id="in_room_input" name="" value=""> -->
+              <textarea style="resize:none"id="in_room_input" cols="10" rows="2"></textarea>
 
+              <button onclick="enterroom()">進去房間</button>
+
+            </div>
         <script type="text/javascript">
             var oHistory = $('#history');
-            var o_textaera = $('#message_textaera');
             var sample__json={
                "action":"",
                "user_guess":"",
@@ -98,12 +111,13 @@
                     var dataReceive = evt.data;
                     dataReceive=JSON.parse(dataReceive);
                     dataReceive=dataReceive['recv_message'];
-                    console.log("資料已接收..."+dataReceive);
-                    $('#history').val($('#history').val()+dataReceive+"\n");
+
+
                 };
 
                 ws.onclose = function() {
                     console.log("連線已關閉...");
+                    alert("連線已關閉...");
                 };
 
             }else{
@@ -112,27 +126,41 @@
             }
 
             function sendMessage(){
+                var o_textaera = $('#chat_textaera');
                 var dataSend = o_textaera.val().trim();
-                sample__json['action']='send_message';
-                sample__json['send_message']=dataSend;
+                var resend=sample__json;
+                resend['action']='send_message';
+                resend['send_message']=dataSend;
 
-                ws.send(JSON.stringify(sample__json));
+                ws.send(JSON.stringify(resend));
                 o_textaera.val('');
             }
             function creatroom()
             {
-              sample__json['action']='creat_room';
-              ws.send(dataSend);
+
+              var resend=sample__json;
+              resend['action']='creat_room';
+              ws.send(JSON.stringify(resend));
             }
             function enterroom()
             {
-              sample__json['action']='join_room';
-              sample__json['join_room']=
-              ws.send(dataSend);
+              var o_textaera = $('#in_room_input');
+              var dataSend = o_textaera.val().trim();
+              var resend=sample__json;
+              resend['action']='join_room';
+              resend['join_room']=dataSend;
+              ws.send(JSON.stringify(resend));
+              o_textaera.val('');
             }
             function guess()
             {
-
+              var o_textaera = $('#guess_textaera');
+              var dataSend = o_textaera.val().trim();
+              var resend=sample__json;
+              resend['action']='join_room';
+              resend['join_room']=dataSend;
+              ws.send(JSON.stringify(resend));
+              o_textaera.val('');
             }
         </script>
     </body>
