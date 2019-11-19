@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ˇ<!DOCTYPE html>
 <html>
 
 <head>
@@ -8,8 +8,12 @@
     body {
       overflow: hidden;
       font-family: Microsoft JhengHei;
+      /* margin: auto; */
     }
-
+    #canvas{
+      margin: auto;
+      width: 1000px;
+    }
     #in_room {
       margin: auto;
       text-align: center;
@@ -60,40 +64,44 @@
 </head>
 
 <body>
-  <div id="banner">
-    <p>guess_histroy</p>
+  <div id="canvas">
+    <div id="banner">
+      <p>guess_histroy</p>
 
-    <p>chat_histroy</p>
-
-
-  </div>
-
-  <div id="show_history">
-    <textarea id="guess_histroy" style="resize:none"readonly="readonly" cols="80" rows="20"></textarea>
-    <textarea id="chat_histroy" style="resize:none"readonly="readonly" cols="80" rows="20"></textarea>
-
-  </div>
-
-  <div id="_textaera">
-    <textarea id="guess_textaera" style="resize:none" cols="80" rows="5"></textarea>
-    <textarea id="chat_textaera" style="resize:none" cols="80" rows="5"></textarea>
-
-  </div>
-
-  <div id="send_btn">
-    <button onclick="sendMessage()">傳送對話</button>
-    <button onclick="guess()">猜</button>
-    <button onclick="creatroom()">創房間</button>
+      <p>chat_histroy</p>
 
 
+    </div>
 
-  </div>
-  <div id="in_room">
-    <!-- <input type="text"id="in_room_input" name="" value=""> -->
-    <textarea style="resize:none" id="in_room_input" cols="10" rows="2"></textarea>
+    <div id="show_history">
+      <textarea id="guess_histroy" style="resize:none"readonly="readonly" cols="80" rows="20"></textarea>
+      <textarea id="chat_histroy" style="resize:none"readonly="readonly" cols="80" rows="20"></textarea>
 
-    <button onclick="enterroom()">進去房間</button>
+    </div>
 
+    <div id="_textaera">
+      <textarea id="guess_textaera" style="resize:none" cols="80" rows="5"></textarea>
+      <textarea id="chat_textaera" style="resize:none" cols="80" rows="5"></textarea>
+
+    </div>
+
+    <div id="send_btn">
+      <button onclick="guess()">猜</button>
+      <button onclick="sendMessage()">傳送對話</button>
+
+
+
+
+    </div>
+    <div id="in_room">
+      <!-- <input type="text"id="in_room_input" name="" value=""> -->
+      <textarea style="resize:none" id="in_room_input" cols="10" rows="1"></textarea>
+      <p></p>
+      <button onclick="enterroom()">進去房間</button>
+      <button onclick="creatroom()">創房間</button>
+
+
+    </div>
   </div>
   <script type="text/javascript">
     var oHistory = $('#history');
@@ -112,33 +120,28 @@
       //var ws = new WebSocket("ws://localhost:9001");
       ws.onopen = function() {
       console.log("websocket 已連線上");
-      // }
-
+      }
+      var dataReceive='';
       ws.onmessage = function(evt) {
-        var dataReceive = evt.data;
+         dataReceive= evt.data;
         dataReceive = JSON.parse(dataReceive);
         var action = dataReceive['action'];
         if (action == 'respond_guess') {
 
-            $('#guess_histroy').append(dataReceive['respond_guess']);
+            $('#guess_histroy').append(dataReceive['respond_guess']+'\n');
 
         }
         if (action == 'recv_message') {
-            $('#chat_histroy').append(dataReceive['recv_message'])
+            $('#chat_histroy').append('somebody send:'+dataReceive['recv_message']+'\n')
         }
         if (action == 'creat_room') {
-            $('#chat_histroy').append(dataReceive['creat_room'])
+            $('#chat_histroy').append(dataReceive['creat_room']+'\n')
         }
 
         if (action == 'join_room') {
-          $('#chat_histroy').append(dataReceive['join_room'])
+          $('#chat_histroy').append(dataReceive['join_room']+'\n')
 
         }
-
-
-
-
-
       };
 
       ws.onclose = function() {
@@ -146,10 +149,10 @@
         alert("連線已關閉...");
       };
 
-    } else {
+    // } else {
       // 瀏覽器不支援 WebSocket
-      console.log("您的瀏覽器不支援 WebSocket!");
-    }
+      // console.log("您的瀏覽器不支援 WebSocket!");
+    // }
 
     function sendMessage() {
       var o_textaera = $('#chat_textaera');
@@ -157,6 +160,7 @@
       var resend = sample__json;
       resend['action'] = 'send_message';
       resend['send_message'] = dataSend;
+      $('#chat_histroy').append('you send:'+dataSend+'\n')
 
       ws.send(JSON.stringify(resend));
       o_textaera.val('');
@@ -183,8 +187,8 @@
       var o_textaera = $('#guess_textaera');
       var dataSend = o_textaera.val().trim();
       var resend = sample__json;
-      resend['action'] = 'join_room';
-      resend['join_room'] = dataSend;
+      resend['action'] = 'user_guess';
+      resend['user_guess'] = dataSend;
       ws.send(JSON.stringify(resend));
 
       o_textaera.val('');
