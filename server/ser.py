@@ -28,7 +28,8 @@ sample_json ={
  "join_room":""
 }
 room = []
-def genQ():
+
+def genQ(): # generate question
     ans=""
     while 1:
         if (len(ans) == 4):
@@ -37,7 +38,8 @@ def genQ():
         if inp not in ans:
             ans+=inp
     return(ans)
-def chk_ans(guess, ans):
+
+def chk_ans(guess, ans): # check ans correct or not ,if it's not correct return _A_B
     if (len(guess) !=4):
         return 'error'
     while 1:
@@ -53,8 +55,8 @@ def chk_ans(guess, ans):
                 B = B + 1
         B = B - A
         return (str(A) + 'A' + str(B) + 'B')
-# Called for every client connecting (after handshake)
-def new_client(client, server):
+
+def new_client(client, server): # if new client connected,send client "wellcom"
     print("New client connected and was given id %d" % client['id'])
     # server.send_message_to_all("Hey all, a new client has joined us")
     resend = sample_json
@@ -76,13 +78,13 @@ def message_received(client, server, message):
     try:
 
         resend = sample_json
-        message_djson = json.loads(message)
+        message_djson = json.loads(message) # json decode
         print(message_djson)
 
         if (message_djson['action'] == 'user_guess'):
-            
+
             resend['action'] = 'respond_guess'
-            for key in range(0,len(room)):
+            for key in range(0,len(room)): 
                 if ((room[key]['p1']) == client or (room[key]['p2']) == client):
                     ret = chk_ans(message_djson['user_guess'], room[key]['ans'])
                     print(room[key]['ans'])
@@ -147,21 +149,11 @@ def message_received(client, server, message):
                     break
         resend.clear()
     except:
-        pass                
-
-
-
-
-
+        pass
 
     # print("Client(%d) said: %s" % (client['id'], message))
-
-
-
-
     # server.send_message_to_all("Client(%d) said: %s" % (client['id'], message))
     # server.send_message(client,"Client(%d) said: %s" % (client['id'], message))
-
 
 PORT=9001
 server = WebsocketServer(PORT)
