@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Net.WebSockets;
 using System.Runtime.Serialization;
+using System.Threading;
 
 namespace _1A1B
 {
@@ -25,8 +26,19 @@ namespace _1A1B
         public MainWindow()
         {
             InitializeComponent();
-        }
+            init();
 
+        }
+        public void init()
+        {
+            var location = new Uri("ws://192.168.0.105:8001");
+            ClientWebSocket client = new ClientWebSocket();
+            //Task taskConnect = client.ConnectAsync(location, null);
+            //var cts = new CancellationTokenSource();
+            //client.ConnectAsync(location, cts.Token);
+            client.ConnectAsync(location, CancellationToken.None);
+            MessageBox.Show(client.State.ToString());
+        }
         private void roomid_btn_click(object sender, RoutedEventArgs e)
         {
 
