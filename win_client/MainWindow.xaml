@@ -19,6 +19,7 @@
         <ScrollBar HorizontalAlignment="Left" Margin="298,113,0,0" VerticalAlignment="Top" Height="248" Width="22"/>
         <TextBlock HorizontalAlignment="Left" Margin="25,33,0,0" TextWrapping="Wrap" Text="RoomID:" VerticalAlignment="Top" Height="30" Width="79" FontSize="16" Foreground="#FFDED512"/>
         <TextBlock HorizontalAlignment="Left" Margin="25,67,0,0" TextWrapping="Wrap" Text="GNum:" VerticalAlignment="Top" Height="30" Width="79" FontSize="16" Foreground="#FF86EA0E"/>
+        <Button x:Name="ws_status_btn" Content="ws_status" HorizontalAlignment="Left" Margin="308,4,0,0" VerticalAlignment="Top" Width="75" Click="ws_status_click"/>
 
     </Grid>
 </Window>
