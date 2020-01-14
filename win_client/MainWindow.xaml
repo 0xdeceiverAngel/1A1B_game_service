@@ -5,21 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_1A1B"
         mc:Ignorable="d"
-        Title="1A1B" Height="418.595" Width="740.216">
-    <Grid Background="#FF666666">
-        <TextBox x:Name="roomid_input" HorizontalAlignment="Left" Height="30" Margin="104,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" FontSize="16"/>
-        <Button x:Name="roomid_btn" Content="Enter" HorizontalAlignment="Left" Margin="224,28,0,0" VerticalAlignment="Top" Width="96" Height="30" FontSize="14" Click="roomid_btn_click"/>
-        <TextBox x:Name="guess_input" HorizontalAlignment="Left" Height="30" Margin="104,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" FontSize="16"/>
-        <Button x:Name="guess_btn" Content="Guess" HorizontalAlignment="Left" Margin="224,63,0,0" VerticalAlignment="Top" Width="96" Height="30" FontSize="14" Click="guess_btn_click"/>
-        <TextBox x:Name="chat_input" HorizontalAlignment="Left" Height="31" Margin="359,330,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="264" FontSize="16"/>
-        <Button x:Name="chat_send_btn" Content="Send" HorizontalAlignment="Left" Margin="623,330,0,0" VerticalAlignment="Top" Width="80" Height="31" FontSize="14"/>
-        <TextBlock x:Name="chat_history" HorizontalAlignment="Left" Margin="359,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="302" Width="320" FontSize="14" Text="Message" Background="#CFCFCFCF"/>
-        <ScrollBar HorizontalAlignment="Left" Margin="679,28,0,0" VerticalAlignment="Top" Height="302" Width="24"/>
-        <TextBlock x:Name="sys_history" HorizontalAlignment="Left" Margin="25,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="248" Width="273" FontSize="14" Text="History" Background="#CFCFCFCF"/>
-        <ScrollBar HorizontalAlignment="Left" Margin="298,113,0,0" VerticalAlignment="Top" Height="248" Width="22"/>
+        Title="1A1B_win_client" Height="418.595" Width="740.216" ResizeMode="NoResize">
+    <Grid Background="#FF666666" Margin="0,0,-5.267,-19.297">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="98*"/>
+            <ColumnDefinition Width="269*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="roomid_input" HorizontalAlignment="Left" Height="30" Margin="104,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" FontSize="16" Grid.ColumnSpan="2"/>
+        <Button x:Name="join_room_btn" Content="Enter" HorizontalAlignment="Left" Margin="27.751,28,0,0" VerticalAlignment="Top" Width="96" Height="30" FontSize="14" Click="join_room_btn_click" Grid.Column="1"/>
+        <TextBox x:Name="guess_input" HorizontalAlignment="Left" Height="30" Margin="104,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" FontSize="16" Grid.ColumnSpan="2"/>
+        <Button x:Name="guess_btn" Content="Guess" HorizontalAlignment="Left" Margin="27.751,63,0,0" VerticalAlignment="Top" Width="96" Height="30" FontSize="14" Click="guess_btn_click" Grid.Column="1"/>
+        <TextBox x:Name="chat_input" HorizontalAlignment="Left" Height="31" Margin="171.297,344,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="264" FontSize="16" Grid.Column="1"/>
+        <Button x:Name="chat_send_btn" Content="Send" HorizontalAlignment="Left" Margin="435.297,344,0,0" VerticalAlignment="Top" Width="80" Height="31" FontSize="14" Grid.Column="1" Click="chat_send_btn_click"/>
+        <TextBlock x:Name="chat_history" HorizontalAlignment="Left" Margin="171.297,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="302" Width="320" FontSize="14" Background="#CFCFCFCF" Grid.Column="1"/>
+        <ScrollBar HorizontalAlignment="Left" Margin="491.297,42,0,0" VerticalAlignment="Top" Height="302" Width="24" Grid.Column="1"/>
+        <TextBlock x:Name="guess_history" HorizontalAlignment="Left" Margin="25,128,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="248" Width="273" FontSize="14" Background="#CFCFCFCF" Grid.ColumnSpan="2"/>
+        <ScrollBar HorizontalAlignment="Left" Margin="101.297,128,0,0" VerticalAlignment="Top" Height="248" Width="22" Grid.Column="1"/>
         <TextBlock HorizontalAlignment="Left" Margin="25,33,0,0" TextWrapping="Wrap" Text="RoomID:" VerticalAlignment="Top" Height="30" Width="79" FontSize="16" Foreground="#FFDED512"/>
         <TextBlock HorizontalAlignment="Left" Margin="25,67,0,0" TextWrapping="Wrap" Text="GNum:" VerticalAlignment="Top" Height="30" Width="79" FontSize="16" Foreground="#FF86EA0E"/>
-        <Button x:Name="ws_status_btn" Content="ws_status" HorizontalAlignment="Left" Margin="308,4,0,0" VerticalAlignment="Top" Width="75" Click="ws_status_click"/>
+        <Button x:Name="ws_status_btn" Content="ws_status" HorizontalAlignment="Left" Margin="416.297,14,0,0" VerticalAlignment="Top" Width="75" Click="ws_status_click" Grid.Column="1" RenderTransformOrigin="0.574,1.436"/>
+        <Label Content="History" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,102,0,0"/>
+        <Label Content="Message" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="171.297,16,0,0" Grid.Column="1" RenderTransformOrigin="-0.387,0.564"/>
+        <Button x:Name="creat_room_btn" Content="Creat room" HorizontalAlignment="Left" Margin="27.297,98,0,0" VerticalAlignment="Top" Width="96" Height="30" FontSize="14" Grid.Column="1" Click="creat_room_btn_click"/>
 
     </Grid>
 </Window>
