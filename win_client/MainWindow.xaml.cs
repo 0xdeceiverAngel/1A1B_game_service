@@ -25,7 +25,7 @@ namespace _1A1B
     /// </summary>
     public partial class MainWindow : Window
     {
-        public class send_format
+        public class send_format  // json format 
         {
             public string action { get; set; }
             public string user_guess { get; set; }
@@ -45,7 +45,7 @@ namespace _1A1B
         }
         public async void  initAsync()
         {
-            var location = new Uri("ws://127.0.0.1:9001");
+            var location = new Uri("ws://127.0.0.1:9001"); //connect to server
 
             //Task taskConnect = client.ConnectAsync(location, null);
             //var cts = new CancellationTokenSource();
@@ -59,13 +59,13 @@ namespace _1A1B
                 MessageBox.Show("Connecting lost");
                 System.Environment.Exit(0);
             }
-            recv();
+            recv();  
         }
-        public void send(string data)
+        public void send(string data) 
         {
             ArraySegment<byte> buffer = new ArraySegment<byte>(new byte[1024]);
-            data = data.Remove(data.Length - 1);
-            data = data.Remove(0,1);
+            data = data.Remove(data.Length - 1); // remove string first and last char 
+            data = data.Remove(0,1);            // because to pack need to remove '[' and ']'
             //MessageBox.Show(data);
             var encoded = Encoding.UTF8.GetBytes(data);
             var buf = new ArraySegment<Byte>(encoded, 0, encoded.Length);
@@ -73,7 +73,7 @@ namespace _1A1B
 
         }
        
-        public string ConvertByteArrayToString(ArraySegment<Byte>data)
+        public string ConvertByteArrayToString(ArraySegment<Byte>data) //arraysegment to array to string
         {
             var bytes = new byte[data.Count];
             int pos = 0;
@@ -115,8 +115,6 @@ namespace _1A1B
                 {
                     chat_history.Text += recv_str.join_room + '\n';
                 }
-
-               
             }
             catch
             {
@@ -127,7 +125,7 @@ namespace _1A1B
         {
             List<send_format> resend = new List<send_format>()
             {
-                new send_format(){action="user_guess",user_guess=guess_input.Text}
+                new send_format(){action="user_guess",user_guess=guess_input.Text} // json format
              };
             guess_input.Text = "";
             string tosend = JsonConvert.SerializeObject(resend);
@@ -164,7 +162,7 @@ namespace _1A1B
             send(tosend);
         }
 
-        private void chat_send_btn_click(object sender, RoutedEventArgs e)
+        private void chat_send_btn_click(object sender, RoutedEventArgs e)   
         {
             List<send_format> resend = new List<send_format>()
             {
