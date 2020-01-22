@@ -17,10 +17,8 @@
         <Button x:Name="guess_btn" Content="Guess" HorizontalAlignment="Left" Margin="31,84,0,0" VerticalAlignment="Top" Width="179" Height="35" FontSize="14" Click="guess_btn_click" Grid.Column="1"/>
         <TextBox x:Name="chat_input" HorizontalAlignment="Left" Height="68" Margin="311,735,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="491" FontSize="16" Grid.Column="1"/>
         <Button x:Name="chat_send_btn" Content="Send" HorizontalAlignment="Left" Margin="802,735,0,0" VerticalAlignment="Top" Width="149" Height="68" FontSize="14" Grid.Column="1" Click="chat_send_btn_click"/>
-        <TextBlock x:Name="chat_history" HorizontalAlignment="Left" Margin="311,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="660" Width="595" FontSize="14" Background="#CFCFCFCF" Grid.Column="1"/>
-        <ScrollBar HorizontalAlignment="Left" Margin="906,75,0,0" VerticalAlignment="Top" Height="660" Width="45" Grid.Column="1"/>
-        <TextBlock x:Name="guess_history" HorizontalAlignment="Left" Margin="25,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="637" Width="508" FontSize="14" Background="#CFCFCFCF" Grid.ColumnSpan="2"/>
-        <ScrollBar HorizontalAlignment="Left" Margin="169,168,0,0" VerticalAlignment="Top" Height="637" Width="41" Grid.Column="1"/>
+        <TextBlock x:Name="chat_history" HorizontalAlignment="Left" Margin="310.96,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="660" Width="640" FontSize="14" Background="#CFCFCFCF" Grid.Column="1"/>
+        <TextBlock x:Name="guess_history" HorizontalAlignment="Left" Margin="25,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="637" Width="549" FontSize="14" Background="#CFCFCFCF" Grid.ColumnSpan="2"/>
         <TextBlock HorizontalAlignment="Left" Margin="25,50,0,0" TextWrapping="Wrap" Text="RoomID:" VerticalAlignment="Top" Height="35" Width="147" FontSize="16" Foreground="#FFDED512"/>
         <TextBlock HorizontalAlignment="Left" Margin="25,90,0,0" TextWrapping="Wrap" Text="GNum:" VerticalAlignment="Top" Height="35" Width="147" FontSize="16" Foreground="#FF86EA0E"/>
         <Button x:Name="ws_status_btn" Content="ws_status" HorizontalAlignment="Left" Margin="812,14,0,0" VerticalAlignment="Top" Width="139" Click="ws_status_click" Grid.Column="1" RenderTransformOrigin="0.574,1.436" Height="59"/>
